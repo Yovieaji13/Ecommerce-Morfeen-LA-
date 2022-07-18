@@ -130,15 +130,15 @@
                             </div>
                             <div class="form-group">
                                 <label style="color: white" for="exampleInputPassword1"><strong>Alamat <abbr style="color: red">*</abbr></strong> <br>
-                                    <small>(Isikan beserta RT, RW & Kode Pos tujuan)</small>
+                                    <small></small>
                                 </label>
                                 <input style="background-color: black; color:white" type="text" name="alamat"
                                     class="form-control border border-white" id="exampleInputPassword1"
-                                    placeholder="Alamat" required>
+                                    placeholder="Alamat" value="{{ Auth::user()->alamat }}" disabled>
                             </div>
                             <div class="form-group">
                                 <label style="color: white" for="inputMessage"><strong>Keterangan </strong> <br>
-                                    <small>(Isikan jika ada informasi tambahan)</small>
+                                    <small>(Isikan RT, RW & Kode Pos tujuan, Lalu jika ada informasi tambahan)</small>
                                 </label>
                                 <textarea style="background-color: black; color:white" id="inputMessage" name="keterangan"
                                 class="form-control border border-white" rows="4"
