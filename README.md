@@ -20,9 +20,25 @@ This project was created as a requirement for the recruitment process at PT. INO
 - **Clone project from this repository**
 - **Open terminal into project directory**
 - **Run Composer Install**
+run with this command
+```sh
+composer install
+```
 - **Confifure DB HOST and DB NAME at .env**
 - **Run "php artisan config:clear"**
-- **Run "php artisan migrate:fresh**
-- **Add dummy data wih Run "php artisan tinker" -> "App\Models\Kendaraan::factory()->count(100)->create();" and "App\Models\User::factory()->count(1)->create();"**
-- **Run "php artisan serve" and try API at Postman (if you want to see link request, please read API Documentation)**
+run with this command
+```sh
+php artisan config:clear
+```
+- **Run**
+run with this command
+```sh
+php artisan migrate:fresh --seed
+```
+- **At table barang -> berat Change Type decimal to float**
+- **Run**
+run with this command
+```sh
+php artisan serve
+```
 - **Finish**
