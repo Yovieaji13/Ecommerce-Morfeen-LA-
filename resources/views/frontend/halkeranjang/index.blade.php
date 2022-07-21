@@ -138,9 +138,10 @@
                                             </td>
                                             <td>{{ $item->barang->nama_barang }}</td>
                                             <td> Rp. <?= number_format($item->barang->harga,0,',','.')?></td>
-                                            <td>{{ $item->ukuran }}</td>
+                                            <td>{{ $item->atribut->ukuran }}</td>
                                             <td>
                                                 <form>
+                                                    <input type="hidden" id="stock" class="stock" value="{{ $item->atribut->stock }}">
                                                     <div class="value-button" id="decrease" onclick="decreaseValue({{ $item->id }})" value="Decrease Value">-</div>
                                                     <input type="number" class="qty" id="qty-{{ $item->id }}" value="{{ $item->qty }}" readonly />
                                                     <div class="value-button" id="increase" onclick="increaseValue({{ $item->id }})" value="Increase Value">+</div>
@@ -229,14 +230,24 @@
     <script type="text/javascript">
         function increaseValue(itemId) {
             let data = document.querySelector('#qty-'+itemId);
+            let stock = document.getElementById("stock").value;
+
+            // alert(stock);
             let val = parseInt(data.value);
             val = isNaN(val) ? 0 : val; //Ternary condition
-            val++;
-            // document.querySelector('#qty-'+itemId).value = val;
+            if (val < stock) {
+                val++;
+            } else {
+                val
+            }
+            // val++;
+            console.log(val);
+            // document.querySelector('#qty-'+itemId).value = val;  
             updateCartQty(val,itemId);
         }
 
         function decreaseValue(itemId) {
+            // console.log(itemId);
             let data = document.querySelector('#qty-'+itemId);
             let val = parseInt(data.value);
             val = isNaN(val) ? 0 : val;

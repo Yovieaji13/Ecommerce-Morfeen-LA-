@@ -103,6 +103,14 @@
                                         >
                                     </div>
                                     <div class="form-group">
+                                        <label for="exampleInputBorder">Berat Barang (eg: 0.5) <abbr style="color: red">*</abbr></label>
+                                        <input type="text" class="form-control" name="berat" placeholder="Berat Barang"
+                                            @if (!empty($barang['berat'])) value="{{ $barang['berat'] }}"
+                                            @else value="{{ old('berat') }}"
+                                            @endif
+                                        >
+                                    </div>
+                                    <div class="form-group">
                                         <label for="exampleInputBorder">Deskripsi Produk <abbr style="color: red">*</abbr></label>
                                         <textarea type="text" class="form-control" rows="3" id="exampleInputBorder" name="deskripsi" placeholder="Deskripsi Barang">
                                             @if (!empty($barang['deskripsi'])) {{ $barang['deskripsi'] }}

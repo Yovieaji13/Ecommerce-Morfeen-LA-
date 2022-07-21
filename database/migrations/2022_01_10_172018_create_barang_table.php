@@ -21,6 +21,7 @@ class CreateBarangTable extends Migration
             $table->string('slug')->unique;
             $table->integer('harga');
             $table->text('deskripsi');
+            $table->float('berat');
             $table->integer('status');
             $table->enum('trending',['No','Yes']);
             $table->string('gambar_disply');

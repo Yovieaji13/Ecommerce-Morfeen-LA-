@@ -60,7 +60,7 @@ Route::get('/how-to-order', [HalcustController::class, 'showHow']);
 Route::get('/FAQ', [HalcustController::class, 'showFaq']);
 Route::get('product', [HalproductController::class, 'index']);
 Route::get('product/{slug}', [HalproductController::class, 'categoryShow']);
-Route::get('product/{cat_slug}/{pro_slug}', [HalproductController::class, 'detailByCategory']);
+Route::get('product/{cat_slug}/{pro_slug}', [HalproductController::class, 'detailByCategory'])->name('ByID');
 Route::get('artikel/{slug}', [HalcustController::class, 'showByCatarticle']);
 Route::get('artikel/detail-artikel/{id}', [HaldetailartikelController::class, 'detailByArtikel']);
 

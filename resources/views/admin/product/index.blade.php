@@ -49,6 +49,7 @@
                                             <th>Slug </th>
                                             <th>Harga </th>
                                             <th>Deskripsi </th>
+                                            <th>Berat</th>
                                             <th>Status </th>
                                             <th>Trending</th>
                                             <th colspan="4">Aksi</th>
@@ -67,6 +68,7 @@
                                                 <td>{{ $value->slug }}</td>
                                                 <td><?= "Rp " . number_format($value->harga,0,',','.')?></td>
                                                 <td>{{ Str::limit($value->deskripsi, '50', ' . . . . . . . ') }}</td>
+                                                <td>{{ $value->berat }}</td>
                                                 <td>
                                                     @if($value->status == 1)
                                                         <div class="p-1 mb-1 bg-success text-white" style="text-align: center">Aktif</div>

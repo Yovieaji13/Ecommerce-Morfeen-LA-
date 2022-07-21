@@ -19,8 +19,9 @@ use PhpOffice\PhpSpreadsheet\Calculation\Category;
 class CheckoutController extends Controller
 {
     public function showCo(){
+        // dd(Cart::where('user_id','=',Auth::user()->id)->get());
+
         $cart = $this->data['cart'] = Cart::where('user_id','=',Auth::user()->id)->get();
-        // dd($cart);
         $this->data['ongkir'] = Ongkir::get();
         $this->data['grand_total'] = Cart::where('user_id','=',Auth::user()->id)->get()->sum('total');
 
@@ -46,7 +47,7 @@ class CheckoutController extends Controller
     {
         if (Cart::where('user_id','=',Auth::user()->id)->count()>0) {
             $this->data['transaction'] = Cart::where('user_id','=',Auth::user()->id)->get();
-            $this->data['totalongkir'] = Cart::where('user_id','=',Auth::user()->id)->sum('qty');
+            $this->data['totalongkir'] = Cart::where('user_id','=',Auth::user()->id)->sum('total_berat');
             $this->data['shipment'] = $request;
             $this->data['order'] = $this->checkout($this->data);
             $this->data['ongkir'] = Ongkir::find($request->provinsi)->harga * $this->data['totalongkir'];
@@ -80,7 +81,7 @@ class CheckoutController extends Controller
                     //ambil data batch teratas dengan sisa stok > 0
                     $attribute = Atribut::where('id_barang', $order->barang_id)
                             ->where('stock','>',0)
-                            ->where('ukuran','=',$order->ukuran)
+                            ->where('atribut_id','=',$order->atribut_id)
                             ->orderBy('id', 'asc')
                             ->first();
                     $remainingStockAmount = $attribute->stock;

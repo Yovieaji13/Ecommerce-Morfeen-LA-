@@ -78,6 +78,7 @@ class PersediaanController extends Controller
             $barang->nama_barang = $data['nama_barang'];
             $barang->slug = Str::slug($request['nama_barang']);
             $barang->harga = $data['harga'];
+            $barang->berat = $data['berat'];
             $barang->deskripsi = $data['deskripsi'];
 
             if(!empty($data['status'])){

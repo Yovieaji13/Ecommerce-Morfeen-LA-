@@ -12,7 +12,7 @@ class OrderDetail extends Model
     protected $fillable =[
         'order_id',
         'barang_id',
-        'ukuran',
+        'atribut_id',
         'qty',
         'total',
     ];
@@ -23,5 +23,9 @@ class OrderDetail extends Model
 
     public function orders(){
         return $this->belongsTo('App\Models\Orders', 'order_id');
+    }
+
+    public function atribut(){
+        return $this->belongsTo('App\Models\Atribut', 'atribut_id');
     }
 }

@@ -185,7 +185,7 @@
                                             </td>
                                             <td>{{ $item->barang->nama_barang }}</td>
                                             <td> <?= 'Rp ' . number_format($item->barang->harga, 0, ',', '.') ?> </td>
-                                            <td>{{ $item->ukuran }}</td>
+                                            <td>{{ $item->atribut->ukuran }}</td>
                                             <td>{{ $item->qty }}</td>
                                             <td>
                                                 <?= 'Rp ' . number_format($item->barang->harga * $item->qty, 0, ',', '.') ?>

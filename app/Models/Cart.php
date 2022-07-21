@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,15 +11,23 @@ class Cart extends Model
 {
     use HasFactory;
     protected $table = "cart";
-    protected $fillable =[
+    protected $fillable = [
         'user_id',
         'barang_id',
-        'ukuran',
+        'atribut_id',
+        'total_berat',
         'qty',
         'total',
     ];
 
-    public function barang(){
+    public function barang()
+    {
         return $this->belongsTo('App\Models\Barang', 'barang_id');
+    }
+
+    public function atribut()
+    {
+        // $comment = Atribut::where('id_barang', 'barang_id')->where('ukuran', )->first();
+        return $this->belongsTo('App\Models\Atribut', 'atribut_id');
     }
 }

@@ -53,7 +53,8 @@
                     <!-- Logo -->
                     <div class="logo">
                         <a href="/">
-                            <img  src="{{ asset('images/icons/logo2.png') }}" alt="IMG-LOGO" data-logofixed="{{ asset('images/icons/logoa.png') }}">
+                            <img src="{{ asset('images/icons/logo2.png') }}" alt="IMG-LOGO"
+                                data-logofixed="{{ asset('images/icons/logoa.png') }}">
                         </a>
                     </div>
 
@@ -110,13 +111,22 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6 pt-3 pl-5 pb-3">
-                            @if ($barang['trending'] == "Yes")
-                                <label class="float-end badge btn-danger trending_tag" style="font-size: 12px">Popular</label>
+                            @if (session('alert'))
+                                <div class="alert alert-danger">
+                                    {{ session('alert') }}
+                                </div>
+                            @endif
+                            @if ($barang['trending'] == 'Yes')
+                                <label class="float-end badge btn-danger trending_tag"
+                                    style="font-size: 12px">Popular</label>
                             @endif
 
-                            <h3 class="my-2">{{ $barang['category']['nama_kategori'] }} - {{ $barang['nama_barang'] }}</h3>
+
+                            <h3 class="my-2">{{ $barang['category']['nama_kategori'] }} -
+                                {{ $barang['nama_barang'] }}</h3>
                             <p>{{ $barang['deskripsi'] }}</p>
-                            <h2 class="my-2" style="color: rgb(235, 39, 39)"><?= "Rp " . number_format($barang['harga'],0,',','.')?></h2>
+                            <h2 class="my-2" style="color: rgb(235, 39, 39)">
+                                <?= 'Rp ' . number_format($barang['harga'], 0, ',', '.') ?></h2>
 
                             <form action="{{ url('/add-to-cart') }}" method="post" class="form-horizontal qtyFrom">
                                 @csrf
@@ -124,22 +134,28 @@
                                 <input type="hidden" name="harga" value="{{ $barang['harga'] }}">
                                 <h5 class="mt-2">Ukuran</h5>
                                 <div class="form-group">
-                                    <select class="span2 pull-left"  name="ukuran" required>
+                                    <select class="span2 pull-left" name="atribut_id" required>
                                         <option value="">Pilih Opsi</option>
-                                            @foreach ($barang['atribut'] as $item)
-                                                @if($item['stock'] > 0)
-                                                    <option value="{{ $item['ukuran'] }}">{{ $item['ukuran'] }} <small>(tersedia {{ $item['stock'] }} pcs)</small> </option>
-                                                @elseif($item['stock'] == 0)
-                                                    <option value="{{ $item['ukuran'] }}" disabled>{{ $item['ukuran'] }} (Stok Kosong)</option>
-                                                @endif
-                                            @endforeach
+                                        @foreach ($barang['atribut'] as $item)
+                                            @if ($item['stock'] > 0)
+                                                <option value="{{ $item['id'] }}">{{ $item['ukuran'] }}
+                                                    <small>(tersedia {{ $item['stock'] }} pcs)</small>
+                                                </option>
+                                            @elseif($item['stock'] == 0)
+                                                <option value="{{ $item['ukuran'] }}" disabled>{{ $item['ukuran'] }}
+                                                    (Stok Kosong)
+                                                </option>
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
                                 <h5>Jumlah</h5>
                                 <div class="mt-2 ">
                                     <div class="">
                                         <div class="input-group text-center mb-4 " style="width: 130px;">
-                                            <input type="text" name="qty" class="form-control qty-input text-center" value="1" required>                                        </div><br>
+                                            <input type="text" name="qty"
+                                                class="form-control qty-input text-center" value="1" required>
+                                        </div><br>
                                         <button type="submit" class="btn btn-success">
                                             <a><i class="fa fa-shopping-cart"></i></a>
                                             Tambah Ke Keranjang
@@ -159,27 +175,34 @@
                                 <ol class="carousel-indicators">
                                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
                                     </li>
-                                    <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li>
-                                    <li data-target="#carouselExampleIndicators" data-slide-to="2" class="active"></li>
-                                    <li data-target="#carouselExampleIndicators" data-slide-to="4" class="active"></li>
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active">
+                                    </li>
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="2" class="active">
+                                    </li>
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="4" class="active">
+                                    </li>
                                 </ol>
                                 <div class="carousel-inner active">
-                                        <div class="carousel-item active">
-                                            <img class="d-block w-100" src="{{ asset('images/disply/'. $barang['gambar_disply']) }}" alt="First slide">
-                                        </div>
+                                    <div class="carousel-item active">
+                                        <img class="d-block w-100"
+                                            src="{{ asset('images/disply/' . $barang['gambar_disply']) }}"
+                                            alt="First slide">
+                                    </div>
                                     @foreach ($barang['image'] as $item)
                                         <div class="carousel-item">
-                                            <img class="d-block w-100" src="{{ asset('images/katalog/' . $item['url_gambar']) }}" alt="First slide">
+                                            <img class="d-block w-100"
+                                                src="{{ asset('images/katalog/' . $item['url_gambar']) }}"
+                                                alt="First slide">
                                         </div>
                                     @endforeach
                                 </div>
-                                <a class="carousel-control-prev carousel-dark" href="#carouselExampleIndicators" role="button "
-                                    data-slide="prev">
+                                <a class="carousel-control-prev carousel-dark" href="#carouselExampleIndicators"
+                                    role="button " data-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Previous</span>
                                 </a>
-                                <a class="carousel-control-next carousel-dark" href="#carouselExampleIndicators" role="button"
-                                    data-slide="next">
+                                <a class="carousel-control-next carousel-dark" href="#carouselExampleIndicators"
+                                    role="button" data-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Next</span>
                                 </a>
@@ -203,10 +226,13 @@
                                                 <div class="card" style="border: transparent">
                                                     <ul class="">
                                                         <li>
-                                                            <div class="wrap-pic-blo1 bo-rad-10 hov-img-zoom pos-relative">
-                                                                <a href="{{ url('product/detail-product/'.$items->id) }}">
+                                                            <div
+                                                                class="wrap-pic-blo1 bo-rad-10 hov-img-zoom pos-relative">
+                                                                <a
+                                                                    href="{{ url('product/detail-product/' . $items->id) }}">
                                                                     <img src="{{ asset('images/disply/' . $items->gambar_disply) }}"
-                                                                        class="img-fluid img-thumbnail" alt="{{ $items->nama_barang }}"
+                                                                        class="img-fluid img-thumbnail"
+                                                                        alt="{{ $items->nama_barang }}"
                                                                         style="border: transparent" />
                                                                 </a>
                                                             </div>
@@ -214,12 +240,15 @@
                                                     </ul>
                                                     <div class="card-body">
                                                         <div class="d-flex justify-content-md-center">
-                                                            <a href="{{ url('product/detail-product/'.$items->id) }}">
+                                                            <a
+                                                                href="{{ url('product/detail-product/' . $items->id) }}">
                                                                 <h1 class="card-title"
                                                                     style="font-size: 20px; font-weight:bold; color:black">
                                                                     {{ $items->nama_barang }}
                                                                 </h1>
-                                                                <p class=""><?= "Rp " . number_format($items->harga,0,',','.')?></p>
+                                                                <p class="">
+                                                                    <?= 'Rp ' . number_format($items->harga, 0, ',', '.') ?>
+                                                                </p>
                                                             </a>
                                                         </div>
                                                     </div>
