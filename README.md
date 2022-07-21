@@ -6,9 +6,6 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Introduction
-
-This project was created as a requirement for the recruitment process at PT. INOSOFT TRANS SYSTEM as JUNIOR BACKEND DEVELOPER
 
 ### Requirement
 
