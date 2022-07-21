@@ -16,10 +16,10 @@
 
 - **Clone project from this repository**
 - **Open terminal into project directory**
-- **Run Composer Install**
+- **Run Composer update**
 run with this command
 ```sh
-composer install
+composer update or composer install
 ```
 - **Confifure DB HOST and DB NAME at .env**
 - **Run "php artisan config:clear"**
