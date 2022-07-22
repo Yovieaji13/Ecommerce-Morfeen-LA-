@@ -189,7 +189,8 @@
           window.snap.pay("{{$token}}", {
             onSuccess: function(result){
               /* You may add your own implementation here */
-              alert("Pembayaran Sukses!"); console.log(result);
+            //   alert("Pembayaran Sukses!"); 
+            console.log(result);
               $.ajax({
                 url: "/confirmPayment",
                 type:"POST",

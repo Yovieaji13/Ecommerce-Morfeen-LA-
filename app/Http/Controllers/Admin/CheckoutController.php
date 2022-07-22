@@ -26,6 +26,8 @@ class CheckoutController extends Controller
         $this->data['ongkir'] = Ongkir::get();
         $this->data['grand_total'] = Cart::where('user_id', '=', Auth::user()->id)->get()->sum('total');
 
+        // dd($this->data['cart'] = Cart::where('user_id', '=', Auth::user()->id)->first());
+
         return view('frontend.halcheckout.index', $this->data);
     }
 
@@ -47,6 +49,9 @@ class CheckoutController extends Controller
 
     public function saveCheckout(Request $request)
     {
+        // var_dump($request);
+        // $getData = Atribut::get();
+        // var_dump($getData);
         if (Cart::where('user_id', '=', Auth::user()->id)->count() > 0) {
             $this->data['transaction'] = Cart::where('user_id', '=', Auth::user()->id)->get();
             $this->data['totalongkir'] = Cart::where('user_id', '=', Auth::user()->id)->sum('total_berat');
@@ -55,6 +60,10 @@ class CheckoutController extends Controller
             $this->data['ongkir'] = Ongkir::find($request->provinsi)->harga * $this->data['totalongkir'];
             $this->data['provinsi'] = Ongkir::find($request->provinsi)->provinsi;
             $i = 0;
+
+            // $pengurangan = DB::table('Cart')->where('user_id', Auth::user()->id)->first()->qty;
+            // $tes = DB::table('Atribut')->where('barang_id', $request->barang_id)->first();
+           
             foreach ($this->data['transaction'] as $value) {
                 $i++;
                 app('App\Http\Controllers\Admin\OrderDetailController')->store($value, $this->data['order']->id);
@@ -83,24 +92,25 @@ class CheckoutController extends Controller
                 $requestedAmount = $order->qty;
                 while ($requestedAmount > 0) {
                     $storedAmount = 0;
-                    //ambil data batch teratas dengan sisa stok > 0
+                    // ambil data batch teratas dengan sisa stok > 0
                     $attribute = Atribut::where('id_barang', $order->barang_id)
                         ->where('stock', '>', 0)
-                        ->where('atribut_id', '=', $order->atribut_id)
+                        ->where('id', '=', $order->atribut_id)
                         ->orderBy('id', 'asc')
                         ->first();
-                    $remainingStockAmount = $attribute->stock;
+                    $remainingStockAmount = $order->atribut->stock;
                     //cek apabila jumlah produk yang diminta < stok yang dimiliki
                     if ($remainingStockAmount > $requestedAmount) {
                         $storedAmount = $requestedAmount;
                         $remainingStockAmount = $remainingStockAmount - $requestedAmount;
-                        $requestedAmount = 0;
+                        // $requestedAmount = 0;
+                        // dd($remainingStockAmount);
                     }
                     //cek apabila jumlah produk yang diminta > stok yang dimiliki
                     else {
                         $storedAmount = $remainingStockAmount;
                         $requestedAmount = $requestedAmount - $remainingStockAmount;
-                        $remainingStockAmount = 0;
+                        // $remainingStockAmount = 0;
                     }
                     //simpan perubahan jumlah stok pada table Restock Batch
                     $attribute->stock = $remainingStockAmount;

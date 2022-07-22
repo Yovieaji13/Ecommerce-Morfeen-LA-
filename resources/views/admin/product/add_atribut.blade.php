@@ -58,19 +58,22 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label for="exampleInputBorder">Kode Produk <abbr style="color: red">*</abbr></label>
+                                                        <label for="exampleInputBorder">Kode Produk <abbr
+                                                                style="color: red">*</abbr></label>
                                                         <input type="text" value="{{ $barang['kode_barang'] }}"
                                                             type="text" class="form-control" id="exampleInputBorder"
                                                             disabled>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="exampleInputBorder">Nama Produk <abbr style="color: red">*</abbr></label>
+                                                        <label for="exampleInputBorder">Nama Produk <abbr
+                                                                style="color: red">*</abbr></label>
                                                         <input type="text" value="{{ $barang['nama_barang'] }}"
                                                             type="text" class="form-control" id="exampleInputBorder"
                                                             disabled>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="exampleInputBorder">Gambar Produk <abbr style="color: red">*</abbr></label>
+                                                        <label for="exampleInputBorder">Gambar Produk <abbr
+                                                                style="color: red">*</abbr></label>
                                                         @if ($barang->gambar_disply)
                                                             <img src="{{ asset('images/disply/' . $barang->gambar_disply) }}"
                                                                 alt="" width=300px height=auto>
@@ -78,7 +81,8 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="exampleInputBorder">Ukuran, Stok & SKU Produk <abbr style="color: red">*</abbr></label>
+                                                            <label for="exampleInputBorder">Ukuran, Stok & SKU Produk <abbr
+                                                                    style="color: red">*</abbr></label>
                                                             <div class="field_wrapper">
                                                                 <input type="text" name="ukuran[]" id="ukuran"
                                                                     value="" name="ukuran[]" style="width: 60px"
@@ -107,7 +111,8 @@
                                     @csrf
                                     <div class="card card-primary">
                                         <div class="card-header">
-                                            <h3 class="card-title">Ukuran, Stok & SKU Produk {{ $barang->nama_barang }}</h3>
+                                            <h3 class="card-title">Ukuran, Stok & SKU Produk {{ $barang->nama_barang }}
+                                            </h3>
                                         </div>
                                         <div class="card-body">
                                             <table id="product" class="table table-bordered table-responsive">
@@ -128,8 +133,8 @@
                                                             <td>{{ $key['ukuran'] }}</td>
                                                             <td>
                                                                 <input type="number" name="stock[]"
-                                                                    value="{{ $key['stock'] }}" min="0" required=""
-                                                                    style="text-align: center;">
+                                                                    value="{{ $key['stock'] }}" min="0"
+                                                                    required="" style="text-align: center;">
                                                             </td>
                                                             <td>{{ $key['sku'] }}</td>
                                                             <td>
