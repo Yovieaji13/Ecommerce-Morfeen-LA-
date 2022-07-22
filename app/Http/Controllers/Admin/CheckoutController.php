@@ -18,56 +18,61 @@ use PhpOffice\PhpSpreadsheet\Calculation\Category;
 
 class CheckoutController extends Controller
 {
-    public function showCo(){
+    public function showCo()
+    {
         // dd(Cart::where('user_id','=',Auth::user()->id)->get());
 
-        $cart = $this->data['cart'] = Cart::where('user_id','=',Auth::user()->id)->get();
+        $cart = $this->data['cart'] = Cart::where('user_id', '=', Auth::user()->id)->get();
         $this->data['ongkir'] = Ongkir::get();
-        $this->data['grand_total'] = Cart::where('user_id','=',Auth::user()->id)->get()->sum('total');
+        $this->data['grand_total'] = Cart::where('user_id', '=', Auth::user()->id)->get()->sum('total');
 
-        return view('frontend.halcheckout.index',$this->data);
+        return view('frontend.halcheckout.index', $this->data);
     }
 
-    public function checkout($request){
+    public function checkout($request)
+    {
         $order = Orders::create([
-            'user_id'=>Auth::user()->id,
-            'provinsi_id'=>$request['shipment']->provinsi,
-            'no_order' => 'MORF-'.date('Ymd').rand(1111,9999),
+            'user_id' => Auth::user()->id,
+            'provinsi_id' => $request['shipment']->provinsi,
+            'no_order' => 'MORF-' . date('Ymd') . rand(1111, 9999),
             'transaction_status' => 'pending',
-            'token' => rand(1111,9999).'xxi'.rand(1111,9999),
-            'kota'=>$request['shipment']->kota,
-            'alamat'=>$request['shipment']->alamat,
-            'keterangan'=>$request['shipment']->keterangan,
-            'total'=>$request['transaction']->sum('total'),
+            'token' => rand(1111, 9999) . 'xxi' . rand(1111, 9999),
+            'kota' => $request['shipment']->kota,
+            'alamat' => $request['shipment']->alamat,
+            'keterangan' => $request['shipment']->keterangan,
+            'total' => $request['transaction']->sum('total'),
         ]);
         return $order;
     }
 
     public function saveCheckout(Request $request)
     {
-        if (Cart::where('user_id','=',Auth::user()->id)->count()>0) {
-            $this->data['transaction'] = Cart::where('user_id','=',Auth::user()->id)->get();
-            $this->data['totalongkir'] = Cart::where('user_id','=',Auth::user()->id)->sum('total_berat');
+        if (Cart::where('user_id', '=', Auth::user()->id)->count() > 0) {
+            $this->data['transaction'] = Cart::where('user_id', '=', Auth::user()->id)->get();
+            $this->data['totalongkir'] = Cart::where('user_id', '=', Auth::user()->id)->sum('total_berat');
             $this->data['shipment'] = $request;
             $this->data['order'] = $this->checkout($this->data);
             $this->data['ongkir'] = Ongkir::find($request->provinsi)->harga * $this->data['totalongkir'];
             $this->data['provinsi'] = Ongkir::find($request->provinsi)->provinsi;
-            $i=0;
+            $i = 0;
             foreach ($this->data['transaction'] as $value) {
                 $i++;
-                app('App\Http\Controllers\Admin\OrderDetailController')->store($value,$this->data['order']->id);
+                app('App\Http\Controllers\Admin\OrderDetailController')->store($value, $this->data['order']->id);
                 Cart::where('id', $value->id)->delete();
             }
-            $this->data['token'] = $this->reqPayment($this->data['order'],$this->data['ongkir']);
+            $this->data['token'] = $this->reqPayment($this->data['order'], $this->data['ongkir']);
             return view('frontend.halcheckout.showSnap', $this->data);
         }
     }
-    public function confirmPayment(Request $request){
+    public function confirmPayment(Request $request)
+    {
         // return $request->result['status_code'];
         $orderPending = Orders::where('no_order', $request->result['order_id'])->first();
         // $orderEncryption = hash("sha512",$orderPending->no_order.'200'.$orderPending->total.'.00'.'SB-Mid-server-dx5ECjkef78uZ5c8_pl2_pGU');
-        if ($orderPending->transaction_status == 'pending' &&
-            ($request->result['transaction_status'] == 'settlement' || $request->result['transaction_status'] == 'capture')) {
+        if (
+            $orderPending->transaction_status == 'pending' &&
+            ($request->result['transaction_status'] == 'settlement' || $request->result['transaction_status'] == 'capture')
+        ) {
             $orderPending->transaction_status = 'settlement';
             // $orderPending->settlement_time = $request->result['transaction_time'];
             $orderPending->payment_type = $request->result['payment_type'];
@@ -80,10 +85,10 @@ class CheckoutController extends Controller
                     $storedAmount = 0;
                     //ambil data batch teratas dengan sisa stok > 0
                     $attribute = Atribut::where('id_barang', $order->barang_id)
-                            ->where('stock','>',0)
-                            ->where('atribut_id','=',$order->atribut_id)
-                            ->orderBy('id', 'asc')
-                            ->first();
+                        ->where('stock', '>', 0)
+                        ->where('atribut_id', '=', $order->atribut_id)
+                        ->orderBy('id', 'asc')
+                        ->first();
                     $remainingStockAmount = $attribute->stock;
                     //cek apabila jumlah produk yang diminta < stok yang dimiliki
                     if ($remainingStockAmount > $requestedAmount) {
@@ -92,7 +97,7 @@ class CheckoutController extends Controller
                         $requestedAmount = 0;
                     }
                     //cek apabila jumlah produk yang diminta > stok yang dimiliki
-                    else{
+                    else {
                         $storedAmount = $remainingStockAmount;
                         $requestedAmount = $requestedAmount - $remainingStockAmount;
                         $remainingStockAmount = 0;
@@ -107,7 +112,8 @@ class CheckoutController extends Controller
         return $orderPending;
     }
 
-    public function reqPayment(Orders $order,$ongkir){
+    public function reqPayment(Orders $order, $ongkir)
+    {
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = 'SB-Mid-server-ndDjR6SNFmFuUZGcmpk69EMb';
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
@@ -120,7 +126,7 @@ class CheckoutController extends Controller
         $params = array(
             'transaction_details' => array(
                 'order_id' => $order->no_order,
-                'gross_amount' => $order->total +$ongkir,
+                'gross_amount' => $order->total + $ongkir,
             ),
             'customer_details' => array(
                 'first_name' => 'morfeen',
@@ -131,38 +137,39 @@ class CheckoutController extends Controller
         );
 
         return $this->data['token'] = \Midtrans\Snap::getSnapToken($params);
-
     }
 
-    public function showTrans(Request $request){
+    public function showTrans(Request $request)
+    {
         Session::put('page', 'penjualan');
-        $order = Orders::select('orders.*','ongkir.harga')
-                ->join('ongkir','ongkir.id','=','orders.provinsi_id')
-                ->paginate(5);
+        $order = Orders::select('orders.*', 'ongkir.harga')
+            ->join('ongkir', 'ongkir.id', '=', 'orders.provinsi_id')
+            ->paginate(5);
 
         $this->data['resultQuery'] = Barang::select('category.*', DB::raw("SUM(atribut.stock) AS total"))
-                ->join('category','category.id','=','barang.id_kategori')
-                ->join('atribut','atribut.id_barang','=','barang.id')
-                ->groupBy('category.id')
-                ->get();
-        $this->data['modal']=0;
+            ->join('category', 'category.id', '=', 'barang.id_kategori')
+            ->join('atribut', 'atribut.id_barang', '=', 'barang.id')
+            ->groupBy('category.id')
+            ->get();
+        $this->data['modal'] = 0;
         foreach ($this->data['resultQuery'] as $category) {
-        $this->data['modal']+= $category->hpp*$category->total;
+            $this->data['modal'] += $category->hpp * $category->total;
         }
-        $this->data['penjualan'] = Orders::where('transaction_status','=','settlement')
-                    ->sum('total');
+        $this->data['penjualan'] = Orders::where('transaction_status', '=', 'settlement')
+            ->sum('total');
 
         return view('admin.penjualan.index', $this->data)->with(compact('order'));
     }
 
-    public function showLaba($id){
+    public function showLaba($id)
+    {
         $this->data['orders'] = Orders::findOrFail($id);
-        $this->data['orderDetail'] = OrderDetail::where('order_id','=',$id)->get();
+        $this->data['orderDetail'] = OrderDetail::where('order_id', '=', $id)->get();
         $this->data['subtotal'] = 0;
         foreach ($this->data['orderDetail'] as $value) {
             $this->data['subtotal'] += $value->total;
         }
-        $this->data['ongkir'] = OrderDetail::where('order_id','=',$id)->sum('qty') * Orders::find($id)->ongkir->harga;
+        $this->data['ongkir'] = OrderDetail::where('order_id', '=', $id)->sum('qty') * Orders::find($id)->ongkir->harga;
         return view('admin.penjualan.laba', $this->data);
     }
 

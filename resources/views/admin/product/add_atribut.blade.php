@@ -128,7 +128,7 @@
                                                             <td>{{ $key['ukuran'] }}</td>
                                                             <td>
                                                                 <input type="number" name="stock[]"
-                                                                    value="{{ $key['stock'] }}" required=""
+                                                                    value="{{ $key['stock'] }}" min="0" required=""
                                                                     style="text-align: center;">
                                                             </td>
                                                             <td>{{ $key['sku'] }}</td>

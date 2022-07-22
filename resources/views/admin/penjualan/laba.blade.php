@@ -54,7 +54,7 @@
                                             <tr>
                                                 <td>{{ $order->id }}</td>
                                                 <td>{{ $order->barang->nama_barang }}</td>
-                                                <td>{{ $order->ukuran }}</td>
+                                                <td>{{ $order->atribut->ukuran }}</td>
                                                 <td>{{ $order->qty }} pcs</td>
                                                 <td>Rp {{ number_format ($order->total/$order->qty , 0 , '.', '.') }}</td>
                                                 <td>Rp {{ number_format ($orders->ongkir->harga, 0 , '.', '.') }} / 1kg</td>
