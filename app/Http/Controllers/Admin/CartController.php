@@ -25,13 +25,13 @@ class CartController extends Controller
 
             // pembulatan
             $hitung = $barang->berat * $request->qty;
-            $hasilBulat = (int) ceil($hitung);
+            // $hasilBulat = (int) ceil($hitung);
 
             Cart::create([
                 'user_id' => Auth::user()->id,
                 'barang_id' => $request->barang_id,
                 'atribut_id' => $request->atribut_id,
-                'total_berat' => $hasilBulat,
+                'total_berat' => $hitung,
                 'qty' => $request->qty,
                 'total' => $total,
             ]);
