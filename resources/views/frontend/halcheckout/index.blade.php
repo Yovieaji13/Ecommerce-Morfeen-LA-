@@ -134,7 +134,7 @@
                                 </label>
                                 <input style="background-color: black; color:white" type="text" name="alamat"
                                     class="form-control border border-white" id="exampleInputPassword1"
-                                    placeholder="Alamat" value="{{ Auth::user()->alamat }}" disabled>
+                                    placeholder="Alamat" value="{{ Auth::user()->alamat }}" required>
                             </div>
                             <div class="form-group">
                                 <label style="color: white" for="inputMessage"><strong>Keterangan </strong> <br>
@@ -172,6 +172,7 @@
                                             <th class="text-white">Nama</th>
                                             <th class="text-white ">Harga</th>
                                             <th class="text-white ">Ukuran</th>
+                                            <th class="text-white ">Berat</th>
                                             <th class="text-white ">Qty</th>
                                             <th class="text-white ">Sub Total</th>
                                         </tr>
@@ -186,6 +187,7 @@
                                             <td>{{ $item->barang->nama_barang }}</td>
                                             <td> <?= 'Rp ' . number_format($item->barang->harga, 0, ',', '.') ?> </td>
                                             <td>{{ $item->atribut->ukuran }}</td>
+                                            <td>{{ $item->barang->berat * $item->qty }} / {{ $item->qty }}kg</td>
                                             <td>{{ $item->qty }}</td>
                                             <td>
                                                 <?= 'Rp ' . number_format($item->barang->harga * $item->qty, 0, ',', '.') ?>
