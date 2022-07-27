@@ -171,6 +171,7 @@
                                             <th class="text-white">Gambar</th>
                                             <th class="text-white">Nama</th>
                                             <th class="text-white ">Harga</th>
+                                            <th class="text-white ">Berat</th>
                                             <th class="text-white ">Ukuran</th>
                                             <th class="text-white ">Qty</th>
                                             <th class="text-white ">Sub Total</th>
@@ -184,6 +185,7 @@
                                                     height="90px">
                                             </td>
                                             <td>{{ $item->barang->nama_barang }}</td>
+                                            <td>{{ $item->barang->berat }}</td>
                                             <td> <?= 'Rp ' . number_format($item->barang->harga, 0, ',', '.') ?> </td>
                                             <td>{{ $item->atribut->ukuran }}</td>
                                             <td>{{ $item->qty }}</td>

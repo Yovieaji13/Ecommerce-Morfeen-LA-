@@ -49,20 +49,16 @@ class CheckoutController extends Controller
 
     public function saveCheckout(Request $request)
     {
-        // var_dump($request);
-        // $getData = Atribut::get();
-        // var_dump($getData);
         if (Cart::where('user_id', '=', Auth::user()->id)->count() > 0) {
+            $berat = Cart::where('user_id', '=', Auth::user()->id)->sum('total_berat');
+            $pembulatan = (int) ceil($berat);
             $this->data['transaction'] = Cart::where('user_id', '=', Auth::user()->id)->get();
-            $this->data['totalongkir'] = Cart::where('user_id', '=', Auth::user()->id)->sum('total_berat');
+            $this->data['totalongkir'] = $pembulatan;
             $this->data['shipment'] = $request;
             $this->data['order'] = $this->checkout($this->data);
             $this->data['ongkir'] = Ongkir::find($request->provinsi)->harga * $this->data['totalongkir'];
             $this->data['provinsi'] = Ongkir::find($request->provinsi)->provinsi;
             $i = 0;
-
-            // $pengurangan = DB::table('Cart')->where('user_id', Auth::user()->id)->first()->qty;
-            // $tes = DB::table('Atribut')->where('barang_id', $request->barang_id)->first();
            
             foreach ($this->data['transaction'] as $value) {
                 $i++;
@@ -77,7 +73,6 @@ class CheckoutController extends Controller
     {
         // return $request->result['status_code'];
         $orderPending = Orders::where('no_order', $request->result['order_id'])->first();
-        // $orderEncryption = hash("sha512",$orderPending->no_order.'200'.$orderPending->total.'.00'.'SB-Mid-server-dx5ECjkef78uZ5c8_pl2_pGU');
         if (
             $orderPending->transaction_status == 'pending' &&
             ($request->result['transaction_status'] == 'settlement' || $request->result['transaction_status'] == 'capture')
@@ -103,7 +98,6 @@ class CheckoutController extends Controller
                     if ($remainingStockAmount > $requestedAmount) {
                         $storedAmount = $requestedAmount;
                         $remainingStockAmount = $remainingStockAmount - $requestedAmount;
-                        // $requestedAmount = 0;
                         // dd($remainingStockAmount);
                     }
                     //cek apabila jumlah produk yang diminta > stok yang dimiliki
